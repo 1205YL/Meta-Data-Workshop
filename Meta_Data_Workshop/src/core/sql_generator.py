@@ -96,8 +96,12 @@ class SQLGenerator:
                 pk_fields = ', '.join(table.primary_keys)
                 field_definitions.append(f"    PRIMARY KEY ({pk_fields})")
             
-            create_statements.extend(field_definitions[:-1])  # 除最后一个外都加逗号
-            create_statements.append(field_definitions[-1])   # 最后一个不加逗号
+            # 添加字段定义，正确处理逗号
+            for i, field_def in enumerate(field_definitions):
+                if i < len(field_definitions) - 1:
+                    create_statements.append(field_def + ",")
+                else:
+                    create_statements.append(field_def)
             
             # 结束CREATE TABLE语句
             create_statements.append(");")

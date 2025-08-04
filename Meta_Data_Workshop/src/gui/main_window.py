@@ -12,6 +12,10 @@ from core.ddl_parser import DDLParser, TableInfo
 from core.metadata_exporter import MetadataExporter
 from core.field_manager import FieldManager
 from core.sql_generator import SQLGenerator
+try:
+    from .dialogs import ExportDialog, FieldManagementDialog, SQLGenerationDialog
+except ImportError:
+    from gui.dialogs import ExportDialog, FieldManagementDialog, SQLGenerationDialog
 
 class MainWindow:
     """主窗口类"""
@@ -438,7 +442,7 @@ class MainWindow:
             messagebox.showwarning("警告", "没有可导出的数据，请先解析DDL文件")
             return
             
-        # 这里会打开导出对话框
+        # 打开导出对话框
         ExportDialog(self.root, self.current_tables, self.metadata_exporter)
         
     def open_field_management(self):
@@ -447,7 +451,7 @@ class MainWindow:
             messagebox.showwarning("警告", "没有数据，请先解析DDL文件")
             return
             
-        # 这里会打开字段管理对话框
+        # 打开字段管理对话框
         FieldManagementDialog(self.root, self.current_tables, self.field_manager, self.on_tables_updated)
         
     def generate_sql(self):
@@ -456,7 +460,7 @@ class MainWindow:
             messagebox.showwarning("警告", "没有数据，请先解析DDL文件")
             return
             
-        # 这里会打开SQL生成对话框
+        # 打开SQL生成对话框
         SQLGenerationDialog(self.root, self.current_tables, self.sql_generator)
         
     def on_tables_updated(self, updated_tables: List[TableInfo]):
@@ -528,34 +532,6 @@ Meta Data Workshop v1.0
     def run(self):
         """运行应用程序"""
         self.root.mainloop()
-
-
-# 辅助对话框类（简化版本，实际项目中会放在单独文件中）
-class ExportDialog:
-    """导出对话框"""
-    def __init__(self, parent, tables, exporter):
-        self.tables = tables
-        self.exporter = exporter
-        
-        messagebox.showinfo("导出", "导出功能开发中...")
-
-class FieldManagementDialog:
-    """字段管理对话框"""
-    def __init__(self, parent, tables, field_manager, callback):
-        self.tables = tables
-        self.field_manager = field_manager
-        self.callback = callback
-        
-        messagebox.showinfo("字段管理", "字段管理功能开发中...")
-
-class SQLGenerationDialog:
-    """SQL生成对话框"""
-    def __init__(self, parent, tables, sql_generator):
-        self.tables = tables
-        self.sql_generator = sql_generator
-        
-        messagebox.showinfo("SQL生成", "SQL生成功能开发中...")
-
 
 if __name__ == "__main__":
     app = MainWindow()
